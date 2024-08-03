@@ -13,7 +13,7 @@ from clone_plugins.users_api import get_user, update_user_info
 from pyrogram import Client, filters, enums
 from plugins.database import get_file_details
 from pyrogram.errors import *
-from config import BOT_USERNAME, ADMINS, AUTH_CHANNEL1
+from config import BOT_USERNAME, ADMINS, AUTH_CHANNEL1, VERIFY, URL, API
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery, InputMediaPhoto
 from config import PICS, CUSTOM_FILE_CAPTION, AUTO_DELETE_TIME, AUTO_DELETE
 import re
