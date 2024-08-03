@@ -12,10 +12,10 @@ from plugins.dbusers import db
 from pyrogram import Client, filters, enums
 from plugins.users_api import get_user, update_user_info
 from plugins.database import get_file_details
-from pyrogram.errors import *
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.errors import ChatAdminRequired, FloodWait
+from pyrogram.types import *
 from utils import verify_user, check_token, check_verification, get_token
-from config import AUTH_CHANNEL
+from config import *
 import re
 import json
 import base64
@@ -25,18 +25,6 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-async def is_subscribed(bot, query, channel):
-    btn = []
-    for id in channel:
-        chat = await bot.get_chat(int(id))
-        try:
-            await bot.get_chat_member(id, query.from_user.id)
-        except UserNotParticipant:
-            btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
-        except Exception as e:
-            pass
-    return btn
-    
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
@@ -60,19 +48,7 @@ def get_size(size):
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
-    if AUTH_CHANNEL:
-        try:
-            btn = await is_subscribed(client, message, AUTH_CHANNEL)
-            if btn:
-                username = (await client.get_me()).username
-                if message.command[1]:
-                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start={message.command[1]}")])
-                else:
-                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start=true")])
-                await message.reply_text(text=f"<b>👋 Hello {message.from_user.mention},\n\nPlease join the channel then click on try again button. 😇</b>", reply_markup=InlineKeyboardMarkup(btn))
-                return
-        except Exception as e:
-            print(e)
+    username = (await client.get_me()).username
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT.format(message.from_user.id, message.from_user.mention))
@@ -362,13 +338,69 @@ async def start(client, message):
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+@Client.on_message(filters.command('api') & filters.private)
+async def shortener_api_handler(client, m: Message):
+    user_id = m.from_user.id
+    user = await get_user(user_id)
+    cmd = m.command
+
+    if len(cmd) == 1:
+        s = script.SHORTENER_API_MESSAGE.format(base_site=user["base_site"], shortener_api=user["shortener_api"])
+        return await m.reply(s)
+
+    elif len(cmd) == 2:    
+        api = cmd[1].strip()
+        await update_user_info(user_id, {"shortener_api": api})
+        await m.reply("<b>Shortener API updated successfully to</b> " + api)
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
+
+@Client.on_message(filters.command("base_site") & filters.private)
+async def base_site_handler(client, m: Message):
+    user_id = m.from_user.id
+    user = await get_user(user_id)
+    cmd = m.command
+    text = f"`/base_site (base_site)`\n\n<b>Current base site: None\n\n EX:</b> `/base_site shortnerdomain.com`\n\nIf You Want To Remove Base Site Then Copy This And Send To Bot - `/base_site None`"
+    if len(cmd) == 1:
+        return await m.reply(text=text, disable_web_page_preview=True)
+    elif len(cmd) == 2:
+        base_site = cmd[1].strip()
+        if base_site == None:
+            await update_user_info(user_id, {"base_site": base_site})
+            return await m.reply("<b>Base Site updated successfully</b>")
+            
+        if not domain(base_site):
+            return await m.reply(text=text, disable_web_page_preview=True)
+        await update_user_info(user_id, {"base_site": base_site})
+        await m.reply("<b>Base Site updated successfully</b>")
+
+# Don't Remove Credit Tg - @VJ_Botz
+# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
+# Ask Doubt on telegram @KingVJ01
+
+@Client.on_callback_query()
+async def cb_handler(client: Client, query: CallbackQuery):
+    if query.data == "close_data":
+        await query.message.delete()
+    elif query.data == "about":
+        buttons = [[
+            InlineKeyboardButton('Hᴏᴍᴇ', callback_data='start'),
+            InlineKeyboardButton('🔒 Cʟᴏsᴇ', callback_data='close_data')
+        ]]
+        await client.edit_message_media(
+            query.message.chat.id, 
+            query.message.id, 
+            InputMediaPhoto(random.choice(PICS))
+        )
+        reply_markup = InlineKeyboardMarkup(buttons)
+        me2 = (await client.get_me()).mention
+        await query.message.edit_text(
+            text=script.ABOUT_TXT.format(me2),
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
+        )
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
