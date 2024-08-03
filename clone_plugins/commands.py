@@ -23,6 +23,16 @@ from config import DB_URI as MONGO_URL
 from pymongo import MongoClient
 from utils import verify_user, check_token, check_verification, get_token
 
+    
+mongo_client = MongoClient(MONGO_URL)
+mongo_db = mongo_client["cloned_vjbotz"]
+
+logger = logging.getLogger(__name__)
+
+# Don't Remove Credit Tg - @VJ_Botz
+# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
+# Ask Doubt on telegram @KingVJ01
+
 async def is_subscribed(bot, query, channel):
     btn = []
     for id in channel:
@@ -35,15 +45,6 @@ async def is_subscribed(bot, query, channel):
             pass
     return btn
     
-mongo_client = MongoClient(MONGO_URL)
-mongo_db = mongo_client["cloned_vjbotz"]
-
-logger = logging.getLogger(__name__)
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 def get_size(size):
     """Get size in readable format"""
 
