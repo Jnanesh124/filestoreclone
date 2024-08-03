@@ -59,6 +59,8 @@ BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
 # Enable - True or Disable - False
 PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "True")), True)
 
+VERIFY = environ.get("VERIFY", "True") # set True Or False and make sure spelling is correct and first letter capital.
+
 # Verify Info :-
 VERIFY_MODE = bool(environ.get('VERIFY_MODE', False)) # Set True or False
 
