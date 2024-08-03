@@ -21,6 +21,11 @@ AUTH_CHANNEL = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('
 
 AUTH_CHANNEL1 = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('AUTH_CHANNEL1', '').split()] # give channel id with seperate space. Ex : ('-10073828 -102782829 -1007282828')
 
+API = environ.get("API", "766185149277536bd3b9bbf1ccc75cb97a411729") # shortlink api
+URL = environ.get("URL", "") # shortlink domain without https://
+BOT_USERNAME = environ.get("BOT_USERNAME", "") # bot username without @
+VERIFY = environ.get("VERIFY", "True") # set True Or False and make sure spelling is correct and first letter capital.
+
 # Bot Information
 API_ID = int(environ.get("API_ID", ""))
 API_HASH = environ.get("API_HASH", "")
