@@ -146,7 +146,7 @@ async def start(client, message):
         msgs = BATCH_FILES.get(file_id)
         if not msg
              file = await client.download_media(file_id)
-            try: 
+             try: 
                 with open(file) as file_data:
                     msgs=json.loads(file_data.read())
             except:
