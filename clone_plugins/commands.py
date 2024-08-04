@@ -12,9 +12,9 @@ from clone_plugins.dbusers import db
 from clone_plugins.users_api import get_user, update_user_info
 from pyrogram import Client, filters, enums
 from plugins.database import get_file_details
-from pyrogram.errors import ChatAdminRequired, FloodWait
-from config import BOT_USERNAME, ADMINS
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery, InputMediaPhoto
+from pyrogram.errors import *
+from config import BOT_USERNAME, ADMINS, AUTH_CHANNEL
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery, InputMediaPhoto
 from config import PICS, CUSTOM_FILE_CAPTION, AUTO_DELETE_TIME, AUTO_DELETE
 import re
 import json
@@ -22,6 +22,18 @@ import base64
 from config import DB_URI as MONGO_URL
 from pymongo import MongoClient
 
+async def is_subscribed(bot, query, channel):
+    btn = []
+    for id in channel:
+        chat = await bot.get_chat(int(id))
+        try:
+            await bot.get_chat_member(id, query.from_user.id)
+        except UserNotParticipant:
+            btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
+        except Exception as e:
+            pass
+    return btn
+    
 mongo_client = MongoClient(MONGO_URL)
 mongo_db = mongo_client["cloned_vjbotz"]
 
