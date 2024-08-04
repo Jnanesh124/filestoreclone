@@ -119,8 +119,8 @@ async def start(client, message):
     if AUTH_CHANNEL:
         try:
             btn = await is_subscribed(client, message, AUTH_CHANNEL)
-                if btn:
-                    username = (await client.get_me()).username
+            if btn:  # Indentation fix here
+                username = (await client.get_me()).username
                 if message.command[1]:
                     btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start={message.command[1]}")])
                 else:
@@ -129,6 +129,8 @@ async def start(client, message):
                 return
         except Exception as e:
             print(e)
+        # ... Rest of your BATCH handling code ... 
+
         try:
             if not await check_verification(client, message.from_user.id) and VERIFY_MODE == True:
                 btn = [[
