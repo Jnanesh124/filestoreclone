@@ -18,7 +18,7 @@ def is_enabled(value, default):
         return default
 
 
-AUTH_CHANNEL = int(environ.get('AUTH_CHANNEL', '-1002183041398'))  # Single 
+AUTH_CHANNEL = -1002183041398  # Replace with your single channel ID
 
 API = environ.get("API", "") # shortlink api
 URL = environ.get("URL", "") # shortlink domain without https://
