@@ -117,7 +117,7 @@ async def start(client, message):
             )
     elif data.split("-", 1)[0] == "BATCH":
         if AUTH_CHANNEL:
-        try:
+            try:
             btn = await is_subscribed(client, message, AUTH_CHANNEL)
                 if btn:  # Indentation fix here
                     username = (await client.get_me()).username
