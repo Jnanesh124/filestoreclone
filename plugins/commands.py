@@ -116,11 +116,11 @@ async def start(client, message):
                 protect_content=True
             )
     elif data.split("-", 1)[0] == "BATCH":
-        if AUTH_CHANNEL:
+    if AUTH_CHANNEL:
         try:
             btn = await is_subscribed(client, message, AUTH_CHANNEL)
-            if btn:
-                username = (await client.get_me()).username
+                if btn:
+                    username = (await client.get_me()).username
                 if message.command[1]:
                     btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start={message.command[1]}")])
                 else:
