@@ -15,7 +15,7 @@ from plugins.database import get_file_details
 from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import *
 from utils import verify_user, check_token, check_verification, get_token
-from config import AUTH_CHANNEL, API_ID, API_HASH, BOT_TOKEN,  URL, PICS, LOG_CHANNEL, CUSTOM_FILE_CAPTION, STREAM_MODE, AUTO_DELETE_MODE, AUTO_DELETE, VERIFY_MODE, VERIFY_TUTORIAL, CLONE_MODE
+from config import *
 import re
 import json
 import base64
@@ -25,21 +25,6 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-async def is_subscribed(bot, query, channel):
-       btn = []
-       try:
-           chat = await bot.get_chat(channel)
-           try:
-               await bot.get_chat_member(channel, query.from_user.id)
-           except UserNotParticipant:
-               btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
-           except Exception as e:
-               logger.exception(f"Error checking chat member: {e}")
-       except Exception as e:
-           logger.exception(f"Error getting chat: {e}")
-       return btn
-
-    
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
@@ -119,16 +104,6 @@ async def start(client, message):
                 protect_content=True
             )
     elif data.split("-", 1)[0] == "BATCH":
-        if AUTH_CHANNEL:
-           btn = await is_subscribed(client, message, AUTH_CHANNEL)  # Pass single channel ID
-           if btn:
-                username = (await client.get_me()).username
-                if message.command[1]:
-                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start={message.command[1]}")])
-                else:
-                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start=true")])
-                await message.reply_text(text=f"<b>👋 Hello {message.from_user.mention},\n\nPlease join the channel then click on try again button. 😇</b>", reply_markup=InlineKeyboardMarkup(btn))
-                return
         try:
             if not await check_verification(client, message.from_user.id) and VERIFY_MODE == True:
                 btn = [[
