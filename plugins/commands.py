@@ -116,7 +116,6 @@ async def start(client, message):
                 protect_content=True
             )
     elif data.split("-", 1)[0] == "BATCH":
-        try:
             if AUTH_CHANNEL:
         try:
             btn = await is_subscribed(client, message, AUTH_CHANNEL)
