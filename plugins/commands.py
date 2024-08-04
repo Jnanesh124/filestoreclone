@@ -84,7 +84,7 @@ async def start(client, message):
             reply_markup=reply_markup
         )
         return
-        if AUTH_CHANNEL:
+        else AUTH_CHANNEL:
         try:
             btn = await is_subscribed(client, message, AUTH_CHANNEL)
             if btn:
