@@ -367,6 +367,7 @@ async def start(client, message):
 
 @Client.on_message(filters.command('api') & filters.private)
 async def shortener_api_handler(client, m: Message):
+    message = message
     user_id = m.from_user.id
     user = await get_user(user_id)
     cmd = m.command
