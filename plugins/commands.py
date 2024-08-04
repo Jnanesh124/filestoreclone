@@ -28,9 +28,9 @@ BATCH_FILES = {}
 async def is_subscribed(bot, query, channel):
        btn = []
        try:
-           chat = await bot.get_chat(channel)  # Get the chat for the single channel
+           chat = await bot.get_chat(channel)
            try:
-               await bot.get_chat_member(channel, query.from_user.id)  # Check membership for the single channel
+               await bot.get_chat_member(channel, query.from_user.id)
            except UserNotParticipant:
                btn.append([InlineKeyboardButton(f'Join {chat.title}', url=chat.invite_link)])
            except Exception as e:
@@ -38,7 +38,6 @@ async def is_subscribed(bot, query, channel):
        except Exception as e:
            logger.exception(f"Error getting chat: {e}")
        return btn
-   
 
     
 # Don't Remove Credit Tg - @VJ_Botz
